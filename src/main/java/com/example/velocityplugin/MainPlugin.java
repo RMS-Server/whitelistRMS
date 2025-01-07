@@ -215,7 +215,7 @@ public class MainPlugin {
 
                 // 向玩家显示提示消息并拒绝连接
                 event.setResult(LoginEvent.ComponentResult.denied(Component.text(
-                    "§e您当前不在白名单中，但是您可以让管理员在RMS白名单管理系统上允许您的临时登录请求！\n" +
+                    "§e您当前不在白名单中，但是您可以让管理员在白名单管理系统上允许您的临时登录请求！\n" +
                     "§e系统将在60秒内等待管理员的审核，请稍后重新连接服务器查看结果。"
                 )));
                 logger.info("Player " + username + " requested temporary login");
