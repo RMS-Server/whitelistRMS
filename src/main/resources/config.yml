@@ -1,0 +1,10 @@
+mysql:
+  host: "127.0.0.1"
+  port: 3306
+  database: "minecraft"
+  username: "root"
+  password: "root"
+  table: "whitelist"
+
+messages:
+  not-whitelisted: "§c你不在白名单中！请联系管理员"

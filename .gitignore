@@ -1,0 +1,26 @@
+# Gradle
+.gradle/
+build/
+out/
+classes/
+
+# IDE
+.idea/
+*.iml
+*.ipr
+*.iws
+.settings/
+.project
+.classpath
+.vscode/
+
+# Compiled files
+*.class
+*.jar
+bin/
+
+# Logs
+*.log
+
+# Local development
+note.txt
