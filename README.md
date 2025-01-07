@@ -27,7 +27,7 @@
 
 ### 安装步骤
 
-1. 下载插件 jar 文件并放入 Velocity 服务器的 `plugins` 目录
+1. [下载 jar 文件](https://github.com/XRain66/WhitelistRMS/releases)并放入 Velocity 服务器的 `plugins` 目录
 2. 启动服务器，插件会自动生成配置文件
 3. 编辑 `plugins/whitelist-rms/config.yml` 配置文件
 4. 重启服务器使配置生效
