@@ -100,6 +100,6 @@ jobs:
         gh release create "v$VERSION" \
           --title "Release $VERSION" \
           --notes-file release_body.txt \
-          build/libs/whitelistRMS-*.jar
+          build/libs/WhitelistRMS-*.jar
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
