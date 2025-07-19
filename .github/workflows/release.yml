@@ -1,0 +1,104 @@
+name: Auto Release
+
+on:
+  push:
+    branches: [ master ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+    
+    - name: Setup Gradle
+      uses: gradle/gradle-build-action@v2
+    
+    - name: Build with Gradle
+      run: ./gradlew clean build shadowJar
+    
+    - name: Get version from plugin.version
+      id: get_version
+      run: |
+        VERSION=$(cat plugin.version | grep -E '^V [0-9]+\.[0-9]+\.[0-9]+' | sed 's/V //')
+        echo "version=$VERSION" >> $GITHUB_OUTPUT
+        echo "Version: $VERSION"
+    
+    - name: Check if tag exists and delete if necessary
+      run: |
+        VERSION=${{ steps.get_version.outputs.version }}
+        if git ls-remote --tags origin | grep -q "refs/tags/v$VERSION"; then
+          echo "Tag v$VERSION exists, deleting release and tag..."
+          # 删除GitHub release (如果存在)
+          gh release delete "v$VERSION" -y || echo "Release v$VERSION not found"
+          # 删除远程tag
+          git push origin --delete "v$VERSION" || echo "Tag v$VERSION not found on remote"
+          # 删除本地tag
+          git tag -d "v$VERSION" || echo "Tag v$VERSION not found locally"
+        fi
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: Create release content
+      id: release_content
+      run: |
+        VERSION=${{ steps.get_version.outputs.version }}
+        
+        # 读取release.note内容
+        RELEASE_NOTES=""
+        if [ -f "release.note" ]; then
+          RELEASE_NOTES=$(cat release.note)
+        fi
+        
+        # 生成使用指南
+        USAGE_GUIDE="
+        
+## 使用指南
+
+### 安装方法
+1. 下载下方的 \`whitelistRMS-${VERSION}.jar\` 文件
+2. 将jar文件放入你的Velocity服务器的 \`plugins\` 目录
+3. 重启服务器或使用 \`/velocity reload\` 重载插件
+
+### 配置
+插件首次运行会在 \`plugins/whitelistRMS/\` 目录下生成配置文件 \`config.yml\`，请根据需要修改数据库连接等配置。
+
+### 命令
+- \`/whitelist add <玩家名>\` - 添加玩家到白名单
+- \`/whitelist remove <玩家名>\` - 从白名单移除玩家
+- \`/whitelist adduuid <UUID>\` - 通过UUID添加玩家到白名单
+- \`/whitelist removeuuid <UUID>\` - 通过UUID从白名单移除玩家
+- \`/whitelist list\` - 查看白名单列表
+- \`/whitelist reload\` - 重载配置文件
+
+### 权限节点
+- \`whitelistrms.admin\` - 管理员权限，可以使用所有命令"
+
+        # 合并内容
+        FULL_CONTENT="$RELEASE_NOTES$USAGE_GUIDE"
+        
+        # 将内容写入文件，避免特殊字符问题
+        echo "$FULL_CONTENT" > release_body.txt
+    
+    - name: Create tag and release
+      run: |
+        VERSION=${{ steps.get_version.outputs.version }}
+        
+        # 创建tag
+        git tag "v$VERSION"
+        git push origin "v$VERSION"
+        
+        # 创建release
+        gh release create "v$VERSION" \
+          --title "Release $VERSION" \
+          --notes-file release_body.txt \
+          build/libs/whitelistRMS-*.jar
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

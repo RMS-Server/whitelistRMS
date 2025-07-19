@@ -3,5 +3,5 @@
   "name": "WhitelistRMS",
   "version": "1.1-SNAPSHOT",
   "authors": ["XRain666"],
-  "main": "com.example.velocityplugin.MainPlugin"
+  "main": "net.rms.xrain.whitelistrms.WhitelistRMS"
 }

@@ -8,3 +8,11 @@ mysql:
 
 messages:
   not-whitelisted: "§c你不在白名单中！请联系管理员"
+
+updater:
+  enabled: true
+  check-interval: 24  # 检查间隔（小时）
+  auto-download: true  # 是否自动下载更新
+  notify-console: true  # 是否在控制台通知更新
+  use-mirror: true  # 是否使用国内镜像（默认启用，方便国内用户）
+  custom-mirror-url: ""  # 自定义镜像地址（留空使用默认镜像）
