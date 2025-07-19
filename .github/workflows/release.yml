@@ -58,34 +58,38 @@ jobs:
         fi
         
         # 生成使用指南
-        USAGE_GUIDE="
-        
+        cat > usage_guide.txt << 'EOF'
+
 ## 使用指南
 
 ### 安装方法
-1. 下载下方的 \`whitelistRMS-${VERSION}.jar\` 文件
-2. 将jar文件放入你的Velocity服务器的 \`plugins\` 目录
-3. 重启服务器或使用 \`/velocity reload\` 重载插件
+1. 下载下方的 `whitelistRMS-${VERSION}.jar` 文件
+2. 将jar文件放入你的Velocity服务器的 `plugins` 目录
+3. 重启服务器或使用 `/velocity reload` 重载插件
 
 ### 配置
-插件首次运行会在 \`plugins/whitelistRMS/\` 目录下生成配置文件 \`config.yml\`，请根据需要修改数据库连接等配置。
+插件首次运行会在 `plugins/whitelistRMS/` 目录下生成配置文件 `config.yml`，请根据需要修改数据库连接等配置。
 
 ### 命令
-- \`/whitelist add <玩家名>\` - 添加玩家到白名单
-- \`/whitelist remove <玩家名>\` - 从白名单移除玩家
-- \`/whitelist adduuid <UUID>\` - 通过UUID添加玩家到白名单
-- \`/whitelist removeuuid <UUID>\` - 通过UUID从白名单移除玩家
-- \`/whitelist list\` - 查看白名单列表
-- \`/whitelist reload\` - 重载配置文件
+- `/whitelist add <玩家名>` - 添加玩家到白名单
+- `/whitelist remove <玩家名>` - 从白名单移除玩家
+- `/whitelist adduuid <UUID>` - 通过UUID添加玩家到白名单
+- `/whitelist removeuuid <UUID>` - 通过UUID从白名单移除玩家
+- `/whitelist list` - 查看白名单列表
+- `/whitelist reload` - 重载配置文件
 
 ### 权限节点
-- \`whitelistrms.admin\` - 管理员权限，可以使用所有命令"
+- `whitelistrms.admin` - 管理员权限，可以使用所有命令
+EOF
+        
+        # 替换版本号
+        sed -i "s/\${VERSION}/$VERSION/g" usage_guide.txt
 
         # 合并内容
-        FULL_CONTENT="$RELEASE_NOTES$USAGE_GUIDE"
-        
-        # 将内容写入文件，避免特殊字符问题
-        echo "$FULL_CONTENT" > release_body.txt
+        if [ -f "release.note" ]; then
+          cat release.note > release_body.txt
+        fi
+        cat usage_guide.txt >> release_body.txt
     
     - name: Create tag and release
       run: |
