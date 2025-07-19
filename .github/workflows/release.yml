@@ -69,16 +69,6 @@ jobs:
         echo "### 配置" >> usage_guide.txt
         echo "插件首次运行会在 \`plugins/whitelistRMS/\` 目录下生成配置文件 \`config.yml\`，请根据需要修改数据库连接等配置。" >> usage_guide.txt
         echo "" >> usage_guide.txt
-        echo "### 命令" >> usage_guide.txt
-        echo "- \`/whitelist add <玩家名>\` - 添加玩家到白名单" >> usage_guide.txt
-        echo "- \`/whitelist remove <玩家名>\` - 从白名单移除玩家" >> usage_guide.txt
-        echo "- \`/whitelist adduuid <UUID>\` - 通过UUID添加玩家到白名单" >> usage_guide.txt
-        echo "- \`/whitelist removeuuid <UUID>\` - 通过UUID从白名单移除玩家" >> usage_guide.txt
-        echo "- \`/whitelist list\` - 查看白名单列表" >> usage_guide.txt
-        echo "- \`/whitelist reload\` - 重载配置文件" >> usage_guide.txt
-        echo "" >> usage_guide.txt
-        echo "### 权限节点" >> usage_guide.txt
-        echo "- \`whitelistrms.admin\` - 管理员权限，可以使用所有命令" >> usage_guide.txt
 
         # 合并内容
         if [ -f "release.note" ]; then
